@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synthcore — Independent App Developer</title>
+<meta name="description" content="Synthcore — Independent mobile app developer. Creator of My Collection, a personal media catalogue app for Android.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #06060f;
+    --surface: #0d0d1f;
+    --border: rgba(100, 120, 255, 0.15);
+    --accent: #4d6fff;
+    --accent2: #a855f7;
+    --text: #e8e8f8;
+    --muted: #6868a0;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── grid background ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(77,111,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(77,111,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── glow orbs ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 12s ease-in-out infinite alternate;
+  }
+  .orb1 { width: 500px; height: 500px; background: rgba(77,111,255,0.12); top: -100px; left: -100px; }
+  .orb2 { width: 400px; height: 400px; background: rgba(168,85,247,0.1); bottom: -80px; right: -80px; animation-delay: -6s; }
+  @keyframes drift { from { transform: translate(0,0); } to { transform: translate(30px, 20px); } }
+
+  /* ── layout ── */
+  .wrap { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ── nav ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(6,6,15,0.8);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--muted); }
+  nav a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--accent); }
+
+  /* ── hero ── */
+  .hero {
+    padding: 160px 0 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .tag::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: var(--mono);
+    font-size: clamp(42px, 8vw, 80px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 520px;
+    line-height: 1.7;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    padding: 12px 28px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { background: #3a5eee; transform: translateY(-1px); }
+
+  .btn-ghost {
+    padding: 12px 28px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  /* ── apps section ── */
+  .section { padding: 80px 0; }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .app-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+  .app-card:hover { border-color: rgba(77,111,255,0.4); transform: translateY(-2px); }
+
+  .app-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #1a2a6a, #0a1535);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 36px;
+  }
+
+  .app-info { flex: 1; }
+  .app-name {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .app-platform {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .app-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+  .app-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tag-pill {
+    padding: 4px 12px;
+    background: rgba(77,111,255,0.1);
+    border: 1px solid rgba(77,111,255,0.2);
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* ── about ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  @media (max-width: 600px) { .about-grid { grid-template-columns: 1fr; } }
+
+  .about-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+  }
+  .about-item-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .about-item-value {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── privacy section ── */
+  .privacy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+  .privacy-card h3 {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+  .privacy-card p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .privacy-card p:last-child { margin-bottom: 0; }
+  .privacy-card strong { color: var(--text); font-weight: 500; }
+
+  /* ── footer ── */
+  footer {
+    padding: 3rem 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  footer .mono { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 1px; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  /* ── contact ── */
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 20px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-link:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── status dot ── */
+  .status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #44ff88;
+    animation: pulse 2s ease-in-out infinite;
+    margin-right: 4px;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<nav>
+  <div class="nav-logo">Synth<span>core</span></div>
+  <div style="display:flex;gap:2rem">
+    <a href="#apps">Apps</a>
+    <a href="#privacy">Privacy</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="tag"><span class="status-dot"></span>Independent Developer</div>
+    <h1>Making apps<br>worth <em>keeping.</em></h1>
+    <p class="hero-sub">Synthcore builds clean, purposeful Android apps for everyday use. No bloat. No tracking. Just software that works.</p>
+    <div class="hero-cta">
+      <a href="#apps" class="btn-primary">View apps</a>
+      <a href="#contact" class="btn-ghost">Get in touch</a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- APPS -->
+  <section class="section" id="apps">
+    <div class="section-label">Apps</div>
+
+    <div class="app-card">
+      <div class="app-icon">💿</div>
+      <div class="app-info">
+        <div class="app-name">My Collection</div>
+        <div class="app-platform">Android — Google Play</div>
+        <p class="app-desc">A personal media catalogue for tracking your physical and digital movie and TV collection. Scan barcodes, log formats (Blu-ray, DVD, UHD, digital), and keep everything organised — all stored locally on your device with no account required.</p>
+        <div class="app-tags">
+          <span class="tag-pill">Barcode Scanner</span>
+          <span class="tag-pill">Offline</span>
+          <span class="tag-pill">No Ads</span>
+          <span class="tag-pill">CSV Export</span>
+          <span class="tag-pill">Free</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="section-label">About</div>
+    <div class="about-grid">
+      <div class="about-item">
+        <div class="about-item-label">Developer</div>
+        <div class="about-item-value">Synthcore — Independent Android developer based in the UK.</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-label">Philosophy</div>
+        <div class="about-item-value">Apps should respect your privacy, work offline, and never waste your time.</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-label">Data policy</div>
+        <div class="about-item-value">No accounts. No tracking. No ads. Your data stays on your device.</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-label">Platform</div>
+        <div class="about-item-value">Android. Available on Google Play.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PRIVACY -->
+  <section class="section" id="privacy">
+    <div class="section-label">Privacy Policy — My Collection</div>
+    <div class="privacy-card">
+      <p><strong>Last updated: May 2026</strong></p>
+
+      <h3>Data collection</h3>
+      <p>My Collection does not collect any personal data. The app does not collect your name, email address, or any personal identifiers, track your location, use analytics or advertising SDKs, send any data to external servers, or require an account or login.</p>
+
+      <h3>Data storage</h3>
+      <p>All data you enter — including collection items, format information, and barcodes — is stored <strong>locally on your device only</strong>. This data never leaves your device.</p>
+
+      <h3>Third-party services</h3>
+      <p>When you use the barcode lookup feature, only the barcode number is sent to UPC Item DB (upcitemdb.com) to retrieve the product title. No personal information is transmitted. No other third-party services are used.</p>
+
+      <h3>Camera</h3>
+      <p>The app requests camera access solely for barcode scanning. Images are processed locally in real time and are never stored or transmitted.</p>
+
+      <h3>Contact</h3>
+      <p>Questions about this policy? Get in touch via the contact section below.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="section-label">Contact</div>
+    <p style="color:var(--muted);font-size:15px;margin-bottom:1.5rem;line-height:1.7">For support, feedback, or questions about any Synthcore app:</p>
+    <a href="mailto:synthcoredevelopment@gmail.com" class="contact-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      synthcoredevelopment@gmail.com
+    </a>
+  </section>
+
+  <footer>
+    <div class="mono">© 2026 Synthcore. All rights reserved.</div>
+    <div class="mono"><a href="#privacy">Privacy Policy</a></div>
+  </footer>
+
+</div>
+</body>
+</html>
